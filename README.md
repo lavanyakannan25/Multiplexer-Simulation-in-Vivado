@@ -63,19 +63,16 @@ Verilog Code
 
 4:1 MUX Gate-Level Implementation
 
-// mux4_to_1_gate.v
-module mux4_to_1_gate (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
-);
-    wire not_S0, not_S1;
-    wire A_and, B_and, C_and, D_and;
-
+module multiplexer(s1,s0,a,b,c,d,y);
+input s1,s0,a,b,c,d;
+output y;
+wire[3:0]w;
+and g1(w[0],~s1,~s0,a);
+and g2(w[1],~s1,s0,b);
+and g3(w[2],s1,~s0,c);
+and g4(w[3],s1,s0,d);
+or g5(y,w[0],w[1],w[2],w[3]);
+endmodule
     // Inverters for select lines
     not (not_S0, S0);
     not (not_S1, S1);
@@ -91,22 +88,13 @@ module mux4_to_1_gate (
 endmodule
 
 4:1 MUX Data Flow Implementation
-
-// mux4_to_1_dataflow.v
-module mux4_to_1_dataflow (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
-);
-    assign Y = (~S1 & ~S0 & A) |
-               (~S1 & S0 & B) |
-               (S1 & ~S0 & C) |
-               (S1 & S0 & D);
+[2:33 pm, 19/9/2024] Keerthanaa Ece: module mux4_to_1_dataflow (A,B,C,D,S1,S0,Y);
+input A,B,C,D,S0,S1;
+output Y;
+assign Y = (~S1 & ~S0 & A) | (~S1 & S0 & B) | (S1 & ~S0 & C) | (S1 & S0 & D);
 endmodule
+[2:43 pm, 19/9/2024] Lavanya: 
+               
 
 4:1 MUX Behavioral Implementation
 
